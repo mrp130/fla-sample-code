@@ -13,11 +13,16 @@ public abstract class Ejector {
 	public abstract boolean isWithdrawable(int amount);
 	
 	protected final boolean isWithdrawableByDeducting(int amount, int eject) {
-		while(amount > 0) {
-			if(amount < 100) {
-				return successor.isWithdrawable(amount);
+		if (amount < 0) {
+			return false;
+		}
+
+		int deducted = amount;
+		while(deducted > 0) {
+			if(deducted < eject) {
+				return successor.isWithdrawable(deducted) || successor.isWithdrawable(amount);
 			}
-			amount -= eject;
+			deducted -= eject;
 		}
 		return true;
 	}
